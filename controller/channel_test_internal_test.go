@@ -124,6 +124,22 @@ func TestNewAPIChannelRegistration(t *testing.T) {
 	assert.Empty(t, constant.ChannelBaseURLs[constant.ChannelTypeNewAPI])
 }
 
+func TestOpenCodeChannelRegistration(t *testing.T) {
+	apiType, ok := common.ChannelType2APIType(constant.ChannelTypeOpenCode)
+
+	require.True(t, ok)
+	assert.Equal(t, constant.APITypeOpenCode, apiType)
+	assert.Equal(t, "OpenCode", constant.GetChannelTypeName(constant.ChannelTypeOpenCode))
+	assert.Equal(t, "https://opencode.ai/inference", constant.GetChannelBaseURL(constant.ChannelTypeOpenCode))
+	assert.Equal(t, []constant.EndpointType{
+		constant.EndpointTypeOpenAI,
+		constant.EndpointTypeOpenAIResponse,
+		constant.EndpointTypeAnthropic,
+		constant.EndpointTypeGemini,
+	}, common.GetEndpointTypesByChannelType(constant.ChannelTypeOpenCode, "glm-5.3"))
+	assert.False(t, common.SupportsResponsesCompact(constant.ChannelTypeOpenCode, apiType))
+}
+
 func TestResponsesCompactChannelSupport(t *testing.T) {
 	tests := []struct {
 		name        string
